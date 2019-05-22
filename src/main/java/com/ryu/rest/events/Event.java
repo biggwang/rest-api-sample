@@ -14,6 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
+/**
+ * 수업일지
+ * ■ EventDto 분리
+ * 왜? 입력값을 제한하는 어노테이션을 추가해야 하는데 어노테이션이 너무 많아 헷갈린다.
+ * 입력값을 받는 Dto를 분리하여 복잡성을 줄인다.
+ * 대신, 단점으로 중복이 생긴다.
+ *
+ */
 @Builder @AllArgsConstructor @NoArgsConstructor
 @Getter @Setter @EqualsAndHashCode(of = "id")   // 상호참조 때문에 스택오버플로우 발생 방지
 @Entity
