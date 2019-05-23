@@ -41,7 +41,7 @@ public class Event {
     private int limitOfEnrollment;
     private boolean offline;
     private boolean free;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)    // ORDINAL로 하게 되면 Enum 타입에 값이 꼬일수 있으므로
     private EventStatus eventStatus;
 
 }

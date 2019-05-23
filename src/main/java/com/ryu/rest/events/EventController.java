@@ -33,6 +33,7 @@ public class EventController {
      * - EventDto로 변경하였더니 기존 eventRepository.save(event) event 객체를 받고 있었는데 다 수정해야 하나??
      * - 아니다! ModelMapper 라이브러리를 추가하면 Event 도메인클래스를 EventDto로 변경 할 수 있다.
      *
+     * ■ Json Object로 받고 싶다면? Json 문자열을 Serilalize를 해줘야함
      */
     @PostMapping
     public ResponseEntity createEvent(@RequestBody EventDto eventDto) {
