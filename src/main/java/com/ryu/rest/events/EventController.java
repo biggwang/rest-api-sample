@@ -54,8 +54,8 @@ public class EventController {
              * 에러 정보를 body에 담아 리턴하고 싶은데 아무 조치 하지 않으면 Json Paser Error가 발생 한다.
              * Eveent 객체는 리턴하면 Json으로 변환 되는데 왜 Errors 객체는 오류가 발생 할까??
              *
-             * 그 이유는, Json으로 변환해 주는 과정이 serilalize라고 하는데 바로 ObjectMapper가 해준다.
-             * 그 ObjectMapper에 여러 seriliaizer에 등록 되어 있지만 Event 객체는 BeanSerializer로 등록되어 있지만 Errors객체는 동록되어 있지않아 발생하는 오류이다.
+             * 그 이유는, Json으로 변환해 주는 과정이 serilalize 라고 하는데 바로 ObjectMapper가 해준다.
+             * 그 ObjectMapper에 여러 seriliaizer에 등록 되어 있지만 Event 객체는 BeanSerializer로 등록되어 있지만 Errors객체는 동록되어 있지 않아 발생하는 오류이다.
              *
              * 그래서 수동으로 ObjectMapper에 serialize 할 수 있게 해주는 클래스가 ErrorsSerializer.java 이다.
              */
