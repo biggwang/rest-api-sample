@@ -2,6 +2,7 @@ package com.ryu.rest.events;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -69,7 +70,23 @@ public class EventController {
 
         Event event = modelMapper.map(eventDto, Event.class);
         Event newEvent = this.eventRepository.save(event);
-        URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
+
+
+
+        /**
+         * 수업일지 (제목: 스프링 HATEOAS 소개, 시간:04:40)
+         *
+         * ■ HATEOAS 란
+         * 어플리케이션 상태에 따른 URI/URL 정보를 클라이언트에게 제공하며
+         * 클라이언트는 어플리케이션 상태에 따른 URI/URL 정보를 받아 볼 수 있다.
+         *
+         * 예를들어, 인증이 되지 않았을 때와 인증이 되었을 때 HATEOAS 정보는 다르다.
+        **/
+        ControllerLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+        URI createdUri = selfLinkBuilder.toUri();
+        EventResource eventResource = new EventResource(event);
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+        eventResource.add(selfLinkBuilder.withRel("update-event"));
         return ResponseEntity.created(createdUri).build();
     }
 }

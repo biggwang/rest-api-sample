@@ -5,10 +5,9 @@ import com.ryu.rest.common.TestDescription;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.junit.runners.Parameterized.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
@@ -19,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -75,9 +75,19 @@ public class EventControllerTests {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_UTF8_VALUE))
-                .andExpect(jsonPath("id").value(Matchers.not(100)))
-                .andExpect(jsonPath("free").value(Matchers.not(true)))
-                .andExpect(jsonPath("eventStatus").value(EventStatus.PUBLISHED))
+                .andExpect(jsonPath("free").value(false))
+                .andExpect(jsonPath("offline").value(true))
+                .andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.events").exists())
+                .andExpect(jsonPath("_links.update-event").exists())
+
+
+        /**
+         * 강좌명: 스프링 REST Docs 소개  (05:40)
+         * Swagger 보다 REST Docs가 선호 하는 이유는 Controller 코드가 바뀌면 테스트코드도 바뀌고 그러면 REST Docs도
+         * 같이 바꾸게 되어서 싱크가 맞기 때문에
+         */
         ;
     }
 
@@ -148,6 +158,37 @@ public class EventControllerTests {
                 .andExpect(jsonPath("content[0].code").exists())
                 .andExpect(jsonPath("_links.index").exists())
         ;
+    }
+
+    @Test
+    /*@Parameters(value={
+            "0, 0, true",
+            "100, 0, false",
+            "0, 100, false"
+    })*/
+//    @Parameters("paramsForTestFree")
+    public void testFree(int basePrice, int maxPrice, boolean isFree) {
+        // Given
+        Event event = Event.builder()
+                .basePrice(basePrice)
+                .maxPrice(maxPrice)
+                .build();
+
+        // When
+        event.update();
+
+        // Then
+//        assertThat(event.isFree()).isEqualTo(isFree);
+
+    }
+
+    private Object[] paramsForTestFree() {
+        return new Object[] {
+                new Object[] {0, 0, true},
+                new Object[] {100, 0, false},
+                new Object[] {0, 100, false},
+                new Object[] {100, 200, false}
+        };
     }
 
 }

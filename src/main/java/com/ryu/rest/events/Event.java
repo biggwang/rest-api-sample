@@ -44,4 +44,18 @@ public class Event {
     @Enumerated(EnumType.STRING)    // ORDINAL로 하게 되면 Enum 타입에 값이 꼬일수 있으므로
     private EventStatus eventStatus;
 
+    public void update() {
+        // Update free
+        if (this.basePrice == 0 && this.maxPrice == 0) {
+            this.free = true;
+        } else {
+            this.free = false;
+        }
+        // Update offline
+        if (this.location == null || this.location.isBlank()) {
+            this.offline = false;
+        } else {
+            this.offline = true;
+        }
+    }
 }
